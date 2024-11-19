@@ -1,0 +1,16 @@
+[build-system]
+requires = ["scikit-build-core>=0.10.6", "nanobind>=2.2.0"]
+build-backend = "scikit_build_core.build"
+
+[project]
+name = "example"
+version = "0.0.1"
+
+[tool.scikit-build]
+cmake.build-type = "Release"
+
+# Install the package
+# pip install .
+
+# Run the example
+# python -c "import example;example.run_simulation()"

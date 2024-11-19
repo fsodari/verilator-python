@@ -5,19 +5,42 @@ build-backend = "scikit_build_core.build"
 [project]
 name = "verilator-dspsim"
 dynamic = ["version"]
+description = "A Python wrapper around an installation of Verilator."
+readme = "README.md"
+authors = [{ name = "Frank Sodari" }]
+classifiers = [
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: LGPL-3.0-only",
+    "Programming Language :: C++",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: Implementation :: PyPy",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Utilities",
+]
 
+[project.urls]
+Homepage = "https://github.com/fsodari/verilator-python"
+
+# Get the version. Make this automatically match verilator? How? Manually make an update every verilator release?
 [tool.scikit-build.metadata.version]
 provider = "scikit_build_core.metadata.regex"
 input = "src/verilator/__init__.py"
 
 [tool.scikit-build]
+cmake.version = ">=3.26.1"
 cmake.build-type = "Release"
-# Setuptools-style build caching in a local directory
+# Build caching in a local directory. Building verilator is slow...
 build-dir = "build/{wheel_tag}"
+wheel.py-api = "cp312"
 
 wheel.packages = ["src/verilator"]
 wheel.install-dir = "verilator"
 
 [project.scripts]
-verilator = "verilator:verilator_cli"
-# pyverilator = "verilator:verilator_cli"
+verilator = "verilator:_verilator_cli"
+
+[tool.cibuildwheel]
+# Run pytest to ensure that the package was correctly built
+test-command = "pytest {project}/tests -s"
+test-requires = "pytest"
