@@ -1,0 +1,19 @@
+[build-system]
+requires = ["scikit-build-core>=0.10.6", "nanobind>=2.2.0"]
+build-backend = "scikit_build_core.build"
+
+[project]
+name = "verilator-example"
+dynamic = ["version"]
+
+[tool.scikit-build.metadata.version]
+provider = "scikit_build_core.metadata.regex"
+input = "src/example/__init__.py"
+
+[tool.scikit-build]
+cmake.build-type = "Release"
+# Setuptools-style build caching in a local directory
+build-dir = "build/{wheel_tag}"
+
+wheel.packages = ["src/example"]
+# wheel.install-dir = "example"

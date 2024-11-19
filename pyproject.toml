@@ -1,0 +1,23 @@
+[build-system]
+requires = ["scikit-build-core>=0.10.6"]
+build-backend = "scikit_build_core.build"
+
+[project]
+name = "verilator-dspsim"
+dynamic = ["version"]
+
+[tool.scikit-build.metadata.version]
+provider = "scikit_build_core.metadata.regex"
+input = "src/verilator/__init__.py"
+
+[tool.scikit-build]
+cmake.build-type = "Release"
+# Setuptools-style build caching in a local directory
+build-dir = "build/{wheel_tag}"
+
+wheel.packages = ["src/verilator"]
+wheel.install-dir = "verilator"
+
+[project.scripts]
+verilator = "verilator:verilator_cli"
+# pyverilator = "verilator:verilator_cli"
