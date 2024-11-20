@@ -13,7 +13,8 @@ jobs:
     strategy:
       matrix:
         # macos-13 is an intel runner, macos-14 is apple silicon
-        os: [ubuntu-latest, windows-latest]
+        # os: [ubuntu-latest, windows-latest]
+        os: [ubuntu-latest]
         python: ["3.12", "3.13"]
 
     steps:
