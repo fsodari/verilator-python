@@ -45,7 +45,7 @@ def verilator_bin() -> Path:
     return verilator_root() / "bin/verilator"
 
 
-def verilator(args: list[str], /, *, capture_output: bool = False):
+def verilator(args: list[str], capture_output: bool = False):
     """
     Run verilator with the given args.
 

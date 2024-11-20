@@ -34,7 +34,7 @@ build.verbose = true
 
 # Build caching in a local directory. Building verilator is slow...
 build-dir = "build/{wheel_tag}"
-# cp312 wheels should be forward compatible with cp313+ wheels with the stable abi.
+# Supporting cp312 stable abi.
 wheel.py-api = "cp312"
 
 # The installed package.
