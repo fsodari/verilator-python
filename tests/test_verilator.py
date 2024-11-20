@@ -40,15 +40,13 @@ def test_verilator_cli():
 
 def test_verilator_root():
     """"""
-    # We expect this package to be installed at "verilator" in site-packages.
-    expected_root = Path(site.getsitepackages()[0]) / "verilator"
-
     # Check the root.
     verilator_root = verilator.verilator_root()
 
-    # I don't think this proves anything?
-    assert verilator_root == expected_root
+    # We expect this package to be installed in site-packages.
+    assert verilator_root.parent in [Path(p) for p in site.getsitepackages()]
 
     # Check for expected files.
-    assert Path(verilator_root / "bin/verilator_bin").exists()
+    assert verilator_root.exists()
+    assert verilator.verilator_bin().exists()
     assert Path(verilator_root / "verilator-config.cmake").exists()

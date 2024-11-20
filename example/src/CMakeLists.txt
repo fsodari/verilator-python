@@ -16,4 +16,4 @@ nanobind_add_stub(
 
 # Install the nanobind wheel.
 install(TARGETS _example LIBRARY DESTINATION example)
-    
+install(FILES _example.cpp DESTINATION ${SKBUILD_HEADERS_DIR}) 

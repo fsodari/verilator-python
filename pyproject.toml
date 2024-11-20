@@ -30,11 +30,17 @@ input = "src/verilator/__init__.py"
 [tool.scikit-build]
 cmake.version = ">=3.26.1"
 cmake.build-type = "Release"
+build.verbose = true
+
 # Build caching in a local directory. Building verilator is slow...
 build-dir = "build/{wheel_tag}"
+# cp312 wheels should be forward compatible with cp313+ wheels with the stable abi.
 wheel.py-api = "cp312"
 
+# The installed package.
 wheel.packages = ["src/verilator"]
+
+# This needs to be set so that verilator installs at site-packages/verilator
 wheel.install-dir = "verilator"
 
 [project.scripts]
@@ -42,5 +48,38 @@ verilator = "verilator:_verilator_cli"
 
 [tool.cibuildwheel]
 # Run pytest to ensure that the package was correctly built
-test-command = "pytest {project}/tests -s"
+test-command = "pytest {project}/tests"
 test-requires = "pytest"
+
+# 64 bit builds
+archs = ["auto64"]
+
+# Don't build arm. Use only > cp39, no PyPy. Not using musl anywhere so no musl (it works though)
+skip = [
+    "cp36-*",
+    "cp37-*",
+    "cp38-*",
+    "cp39-*",
+    "cp310-*",
+    "cp311-*",
+    "*-win_arm64",
+    "pp*",
+]
+
+# manylinux builds
+[tool.cibuildwheel.linux]
+before-all = [
+    "yum install -y flex",
+    "yum install -y bison",
+    "yum install -y ccache",
+]
+
+# musllinux builds
+[[tool.cibuildwheel.overrides]]
+select = "*-musllinux*"
+before-all = [
+    "apk add flex",
+    "apk add flex-dev",
+    "apk add bison",
+    "apk add ccache",
+]
