@@ -54,17 +54,9 @@ test-requires = "pytest"
 # 64 bit builds
 archs = ["auto64"]
 
+build = ["cp312-*", "cp313-*"]
 # Don't build arm. Use only > cp39, no PyPy. Not using musl anywhere so no musl (it works though)
-skip = [
-    "cp36-*",
-    "cp37-*",
-    "cp38-*",
-    "cp39-*",
-    "cp310-*",
-    "cp311-*",
-    "*-win_arm64",
-    "pp*",
-]
+skip = ["*-win_arm64"]
 
 # manylinux builds
 [tool.cibuildwheel.linux]
