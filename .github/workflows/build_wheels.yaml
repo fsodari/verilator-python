@@ -8,24 +8,25 @@ on:
       - releases/**
 
 jobs:
-  # build_windows_wheels:
-  #   name: Python cibuildwheel windows
-  #   runs-on: ["self-hosted", "Windows", "x64"]
+  build_windows_wheels:
+    name: Python cibuildwheel windows
+    runs-on: ["self-hosted", "Windows", "x64"]
 
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - uses: actions/setup-python@v5
-  #       with:
-  #         python-version: '3.13'
-  #         cache: 'pip' # caching pip dependencies
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+          cache: 'pip' # caching pip dependencies
 
-  #     - name: Build Windows wheels
-  #       run: pipx run cibuildwheel
+      - run: python -m pip install pipx
+      - name: Build Windows wheels
+        run: pipx run cibuildwheel
 
-  #     - uses: actions/upload-artifact@v4
-  #       with:
-  #         name: cibw-wheels-windows
-  #         path: ./wheelhouse/*
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cibw-wheels-windows
+          path: ./wheelhouse/*
 
   build_linux_wheels:
     name: Python cibuildwheel linux
