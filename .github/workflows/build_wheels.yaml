@@ -54,10 +54,10 @@ jobs:
         with:
           python-version: '3.12'
           # cache: 'pip' # caching pip dependencies
-      - run: pip install pipx -v
+      - run: pip install build
 
       - name: Build sdist
-        run: pipx run build --sdist
+        run: python -m build --sdist
 
       - uses: actions/upload-artifact@v4
         with:
