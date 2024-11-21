@@ -47,7 +47,7 @@ jobs:
 
   build_sdist:
     name: Build source distribution
-    runs-on: ["self-hosted", "x64"]
+    runs-on: ["self-hosted", "Windows", "x64"]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
