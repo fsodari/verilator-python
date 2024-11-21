@@ -54,7 +54,6 @@ jobs:
         with:
           python-version: '3.12'
           # cache: 'pip' # caching pip dependencies
-      - run: pip install --upgrade pip
       - run: pip install pipx -v
 
       - name: Build sdist
