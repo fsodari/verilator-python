@@ -26,34 +26,34 @@ jobs:
           name: cibw-wheels-windows
           path: ./wheelhouse/*
 
-  build_linux_wheels:
-    name: Python cibuildwheel self-hoster runner
-    runs-on: ["self-hosted", "Linux", "x64"]
+  # build_linux_wheels:
+  #   name: Python cibuildwheel self-hoster runner
+  #   runs-on: ["self-hosted", "Linux", "x64"]
 
-    steps:
-      - uses: actions/checkout@v4
+  #   steps:
+  #     - uses: actions/checkout@v4
 
-      - name: Build Linux wheels
-        run: pipx run cibuildwheel
+  #     - name: Build Linux wheels
+  #       run: pipx run cibuildwheel
 
-      - uses: actions/upload-artifact@v4
-        with:
-          name: cibw-wheels-linux
-          path: ./wheelhouse/*
+  #     - uses: actions/upload-artifact@v4
+  #       with:
+  #         name: cibw-wheels-linux
+  #         path: ./wheelhouse/*
 
-  build_sdist:
-    name: Build source distribution
-    runs-on: ["self-hosted"]
-    steps:
-      - uses: actions/checkout@v4
+  # build_sdist:
+  #   name: Build source distribution
+  #   runs-on: ["self-hosted"]
+  #   steps:
+  #     - uses: actions/checkout@v4
 
-      - name: Build sdist
-        run: pipx run build --sdist
+  #     - name: Build sdist
+  #       run: pipx run build --sdist
 
-      - uses: actions/upload-artifact@v4
-        with:
-          name: cibw-sdist
-          path: dist/*.tar.gz
+  #     - uses: actions/upload-artifact@v4
+  #       with:
+  #         name: cibw-sdist
+  #         path: dist/*.tar.gz
 
   # upload_pypi:
   #   needs: [build_wheels, build_sdist]
