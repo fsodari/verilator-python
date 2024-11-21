@@ -41,8 +41,10 @@ def verilator_bin() -> Path:
     Get the path to verilator_bin
     This will typically be at site-packages/verilator/bin
     """
-
-    return verilator_root() / "bin/verilator"
+    if sys.platform == "win32":
+        return verilator_root() / "bin/verilator_bin.exe"
+    else:
+        return verilator_root() / "bin/verilator"
 
 
 def verilator(args: list[str], capture_output: bool = False):

@@ -26,40 +26,40 @@ jobs:
           name: cibw-wheels-windows
           path: ./wheelhouse/*
 
-  # build_linux_wheels:
-  #   name: Python cibuildwheel linux
-  #   runs-on: ["self-hosted", "Linux", "x64"]
+  build_linux_wheels:
+    name: Python cibuildwheel linux
+    runs-on: ["self-hosted", "Linux", "x64"]
 
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - uses: actions/setup-python@v5
-  #       with:
-  #         python-version: '3.13'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
 
-  #     - name: Build Linux wheels
-  #       run: pipx run cibuildwheel
+      - name: Build Linux wheels
+        run: pipx run cibuildwheel --platform linux
 
-  #     - uses: actions/upload-artifact@v4
-  #       with:
-  #         name: cibw-wheels-linux
-  #         path: ./wheelhouse/*
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cibw-wheels-linux
+          path: ./wheelhouse/*
 
-  # build_sdist:
-  #   name: Build source distribution
-  #   runs-on: ["self-hosted"]
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - uses: actions/setup-python@v5
-  #       with:
-  #         python-version: '3.12'
+  build_sdist:
+    name: Build source distribution
+    runs-on: ["self-hosted"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
 
-  #     - name: Build sdist
-  #       run: pipx run build --sdist
+      - name: Build sdist
+        run: pipx run build --sdist
 
-  #     - uses: actions/upload-artifact@v4
-  #       with:
-  #         name: cibw-sdist
-  #         path: dist/*.tar.gz
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cibw-sdist
+          path: dist/*.tar.gz
 
   # upload_pypi:
   #   needs: [build_windows_wheels, build_linux_wheels, build_sdist]

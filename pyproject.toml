@@ -32,8 +32,6 @@ cmake.version = ">=3.26.1"
 cmake.build-type = "Release"
 build.verbose = true
 
-# Build caching in a local directory. Building verilator is slow...
-build-dir = "build/{wheel_tag}"
 # Supporting cp312 stable abi.
 wheel.py-api = "cp312"
 
