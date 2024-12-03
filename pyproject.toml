@@ -45,6 +45,7 @@ wheel.install-dir = "verilator"
 verilator = "verilator:_verilator_cli"
 
 [tool.cibuildwheel]
+build-verbosity = 1
 # Run pytest to ensure that the package was correctly built
 test-command = "pytest {project}/tests"
 test-requires = "pytest"
@@ -52,9 +53,9 @@ test-requires = "pytest"
 # 64 bit builds
 archs = ["auto64"]
 
-build = ["cp312-*", "cp313-*"]
+build = ["cp312-*"]
 # Don't build arm. Use only > cp39, no PyPy. Not using musl anywhere so no musl (it works though)
-skip = ["*-win_arm64"]
+skip = ["*-win_arm64", "*musllinux*"]
 
 # manylinux builds
 [tool.cibuildwheel.linux]

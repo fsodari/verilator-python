@@ -19,7 +19,7 @@ python -c "import verilator;print(verilator.verilator_root())"
 """
 
 # Use same version number as the checked out verilator version.
-__version__ = "5.30.0"
+__version__ = "5.30.1"
 
 import sys
 from pathlib import Path
@@ -44,7 +44,7 @@ def verilator_bin() -> Path:
     if sys.platform == "win32":
         return verilator_root() / "bin/verilator_bin.exe"
     else:
-        return verilator_root() / "bin/verilator"
+        return verilator_root() / "bin/verilator_bin"
 
 
 def verilator(args: list[str], capture_output: bool = False):
