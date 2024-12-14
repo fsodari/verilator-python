@@ -1,10 +1,7 @@
-[build-system]
-requires = ["scikit-build-core>=0.10.7"]
-build-backend = "scikit_build_core.build"
 
 [project]
 name = "verilator-dspsim"
-version = "5.30.3"
+version = "5.30.4"
 description = "A Python wrapper around an installation of Verilator."
 readme = "README.md"
 authors = [{ name = "Frank Sodari" }]
@@ -23,6 +20,13 @@ dependencies = []
 [project.urls]
 Homepage = "https://github.com/fsodari/verilator-python"
 
+[project.scripts]
+verilator = "verilator:_verilator_cli"
+
+[build-system]
+requires = ["scikit-build-core>=0.10.7"]
+build-backend = "scikit_build_core.build"
+
 [tool.scikit-build]
 cmake.version = ">=3.26.1"
 cmake.build-type = "Release"
@@ -39,10 +43,9 @@ wheel.packages = ["src/verilator"]
 # This needs to be set so that verilator installs at site-packages/verilator
 wheel.install-dir = "verilator"
 
-[project.scripts]
-verilator = "verilator:_verilator_cli"
 
 [tool.cibuildwheel]
+# 2_28 seems to work well with all the tools.
 manylinux-x86_64-image = "manylinux_2_28"
 build-verbosity = 1
 # Run pytest to ensure that the package was correctly built
@@ -64,15 +67,6 @@ before-all = [
     # "yum install -y ccache",
 ]
 
-# # musllinux builds
-# [[tool.cibuildwheel.overrides]]
-# select = "*-musllinux*"
-# before-all = [
-#     "apk add flex",
-#     "apk add flex-dev",
-#     "apk add bison",
-#     "apk add ccache",
-# ]
 
 [dependency-groups]
 dev = ["pytest>=8.3.4"]

@@ -6,6 +6,8 @@ Installing this python package will install "verilator.exe" into the python envi
 
 The main goal of this project is to simplify distributing verilator and using it within a python application.
 
+This project is not affiliated with Verilator.
+
 # Installation
 
 
