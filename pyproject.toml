@@ -1,7 +1,7 @@
 
 [project]
 name = "verilator-dspsim"
-version = "5.30.4"
+version = "5.30.5"
 description = "A Python wrapper around an installation of Verilator."
 readme = "README.md"
 authors = [{ name = "Frank Sodari" }]
@@ -46,7 +46,7 @@ wheel.install-dir = "verilator"
 
 [tool.cibuildwheel]
 # 2_28 seems to work well with all the tools.
-manylinux-x86_64-image = "manylinux_2_28"
+# manylinux-x86_64-image = "manylinux_2_28"
 build-verbosity = 1
 # Run pytest to ensure that the package was correctly built
 test-command = "pytest {project}/tests"
