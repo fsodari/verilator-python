@@ -10,7 +10,7 @@ on:
 jobs:
   build_windows_wheels:
     name: Python cibuildwheel windows
-    runs-on: ["self-hosted", "Windows", "x64"]
+    runs-on: ["windows-latest"]
 
     steps:
       - uses: actions/checkout@v4
@@ -29,31 +29,30 @@ jobs:
 
   build_linux_wheels:
     name: Python cibuildwheel linux
-    runs-on: ["self-hosted", "Linux", "x64"]
+    runs-on: ["ubuntu-latest"]
 
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.13'
+          python-version: '3.12'
 
       - name: Build Linux wheels
-        run: pipx run cibuildwheel --platform linux
+        run: pipx run cibuildwheel --platform linux --output-dir ./dist
 
       - uses: actions/upload-artifact@v4
         with:
           name: cibw-wheels-linux
-          path: ./wheelhouse/*
+          path: ./dist/*.whl
 
   build_sdist:
     name: Build source distribution
-    runs-on: ["self-hosted", "Windows", "x64"]
+    runs-on: ["ubuntu-latest"]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.13'
-          cache: 'pip' # caching pip dependencies
+          python-version: '3.12'
 
       - name: Build sdist
         run: pipx run build --sdist
@@ -63,21 +62,21 @@ jobs:
           name: cibw-sdist
           path: ./dist/*
 
-  # upload_pypi:
-  #   needs: [build_windows_wheels, build_linux_wheels, build_sdist]
-  #   runs-on: ubuntu-latest
-  #   environment: pypi
-  #   permissions:
-  #     id-token: write
-  #   if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
-  #   steps:
-  #     - uses: actions/download-artifact@v4
-  #       with:
-  #         # unpacks all CIBW artifacts into dist/
-  #         pattern: cibw-*
-  #         path: dist
-  #         merge-multiple: true
+  upload_pypi:
+    needs: [build_windows_wheels, build_linux_wheels, build_sdist]
+    runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      id-token: write
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          # unpacks all CIBW artifacts into dist/
+          pattern: cibw-*
+          path: dist
+          merge-multiple: true
 
-  #     - uses: pypa/gh-action-pypi-publish@release/v1
-  #       with:
-  #         repository-url: https://test.pypi.org/legacy/
+      - uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
