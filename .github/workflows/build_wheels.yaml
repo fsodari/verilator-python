@@ -2,36 +2,36 @@ name: Build
 
 on:
   push:
-    branches:
-      - main
+    # branches:
+    #   - main
     tags:
       - 'v*'
 
 env:
   CCACHE_DIR: ${{ github.workspace }}/.ccache
-  WIN_FLEX_BISON: ${{ github.workspace }}/.ccache/winflexbison
+  WIN_FLEX_BISON: ${{ github.workspace }}/.ccache/winflexbison/install
 jobs:
-  # build_sdist:
-  #   name: Build source distribution
-  #   runs-on: ["ubuntu-latest"]
-  #   steps:
-  #     - uses: actions/checkout@v4
+  build_sdist:
+    name: Build source distribution
+    runs-on: ["ubuntu-latest"]
+    steps:
+      - uses: actions/checkout@v4
 
-  #     - name: Install uv
-  #       uses: astral-sh/setup-uv@v4
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
 
-  #     - name: "Set up Python"
-  #       uses: actions/setup-python@v5
-  #       with:
-  #         python-version-file: ".python-version"
+      - name: "Set up Python"
+        uses: actions/setup-python@v5
+        with:
+          python-version-file: ".python-version"
 
-  #     - name: Build sdist
-  #       run: uv build --sdist
+      - name: Build sdist
+        run: uv build --sdist
 
-  #     - uses: actions/upload-artifact@v4
-  #       with:
-  #         name: cibw-sdist
-  #         path: ./dist/*
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cibw-sdist
+          path: ./dist/*
 
   build_windows_wheels:
     name: Python cibuildwheel windows
@@ -58,44 +58,44 @@ jobs:
           name: cibw-wheels-windows
           path: ./dist/*.whl
 
-  # build_linux_wheels:
-  #   name: Python cibuildwheel linux
-  #   runs-on: ["ubuntu-latest"]
+  build_linux_wheels:
+    name: Python cibuildwheel linux
+    runs-on: ["ubuntu-latest"]
 
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - name: Install uv
-  #       uses: astral-sh/setup-uv@v4
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
 
-  #     - name: "Set up Python"
-  #       uses: actions/setup-python@v5
-  #       with:
-  #         python-version-file: ".python-version"
+      - name: "Set up Python"
+        uses: actions/setup-python@v5
+        with:
+          python-version-file: ".python-version"
 
-  #     - name: Build Linux wheels
-  #       run: uvx cibuildwheel --platform linux --output-dir ./dist
+      - name: Build Linux wheels
+        run: uvx cibuildwheel --platform linux --output-dir ./dist
 
-  #     - uses: actions/upload-artifact@v4
-  #       with:
-  #         name: cibw-wheels-linux
-  #         path: ./dist/*.whl
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cibw-wheels-linux
+          path: ./dist/*.whl
 
-  # upload_pypi:
-  #   if: startsWith(github.event.ref, 'refs/tags/v')
-  #   needs: [build_linux_wheels, build_sdist]
-  #   runs-on: ubuntu-latest
-  #   environment:
-  #     name: pypi
-  #     url: https://pypi.org/p/verilator-dspsim
-  #   permissions:
-  #     id-token: write
-  #   steps:
-  #     - uses: actions/download-artifact@v4
-  #       with:
-  #         # unpacks all CIBW artifacts into dist/
-  #         pattern: cibw-*
-  #         path: dist
-  #         merge-multiple: true
+  upload_pypi:
+    if: startsWith(github.event.ref, 'refs/tags/v')
+    needs: [build_linux_wheels, build_sdist]
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/verilator-dspsim
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          # unpacks all CIBW artifacts into dist/
+          pattern: cibw-*
+          path: dist
+          merge-multiple: true
 
-  #     - name: publish distribution to pypi.org
-  #       uses: pypa/gh-action-pypi-publish@release/v1
+      - name: publish distribution to pypi.org
+        uses: pypa/gh-action-pypi-publish@release/v1

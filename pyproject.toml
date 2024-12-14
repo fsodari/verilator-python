@@ -1,7 +1,7 @@
 
 [project]
 name = "verilator-dspsim"
-version = "5.30.7"
+version = "5.30.8"
 description = "A Python wrapper around an installation of Verilator."
 readme = "README.md"
 authors = [{ name = "Frank Sodari" }]
