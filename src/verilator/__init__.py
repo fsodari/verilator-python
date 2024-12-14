@@ -19,8 +19,11 @@ python -c "import verilator;print(verilator.verilator_root())"
 """
 
 # Use same version number as the checked out verilator version.
-__version__ = "5.30.0"
+import importlib.metadata
 
+__version__ = importlib.metadata.version("verilator-dspsim")
+
+import importlib.metadata
 import sys
 from pathlib import Path
 import subprocess
@@ -33,7 +36,7 @@ def verilator_root() -> Path:
     This will typically be at site-packages/verilator
     """
     # Verilator is installed in the same directory as this package.
-    return Path(__file__).parent
+    return Path(__file__).parent.absolute()
 
 
 def verilator_bin() -> Path:
@@ -41,11 +44,13 @@ def verilator_bin() -> Path:
     Get the path to verilator_bin
     This will typically be at site-packages/verilator/bin
     """
+    if sys.platform == "win32":
+        return verilator_root() / "bin/verilator_bin.exe"
+    else:
+        return verilator_root() / "bin/verilator"
 
-    return verilator_root() / "bin/verilator"
 
-
-def verilator(args: list[str], /, *, capture_output: bool = False):
+def verilator(args: list[str], capture_output: bool = False):
     """
     Run verilator with the given args.
 

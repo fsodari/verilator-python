@@ -1,0 +1,1 @@
+pip install --no-build-isolation -Cbuild-dir=build -v .
