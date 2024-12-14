@@ -1,7 +1,7 @@
 
 [project]
 name = "verilator-dspsim"
-version = "5.30.6"
+version = "5.30.7"
 description = "A Python wrapper around an installation of Verilator."
 readme = "README.md"
 authors = [{ name = "Frank Sodari" }]
@@ -68,9 +68,8 @@ before-all = [
 ]
 
 [tool.cibuildwheel.windows]
-# environment = { WIN_FLEX_BISON = "./extern/winflexbison/install", FLEX_INCLUDE = "./extern/winflexbison/install" }
+environment = { CMAKE_PREFIX_PATH = "extern", WIN_FLEX_BISON = "./extern/winflexbison/install", FLEX_INCLUDE = "./extern/winflexbison/install" }
 # Install winflexbison to extern/winflexbison. Add extern to prefix path so cmake can find the package when building.
-environment = { CMAKE_PREFIX_PATH = "extern" }
 # 
 before-all = ["powershell ./scripts/win-install-winflexbison.ps1"]
 
