@@ -4,14 +4,16 @@ Test if the package works.
 
 import verilator
 import subprocess
-from packaging.version import Version
+
+# from packaging.version import Version
 import site
 from pathlib import Path
 
 
 def _parse_version_stdout(stdout: bytes):
     """Parse the version from stdout. Used to test if verilator works."""
-    return Version(stdout.decode().strip().strip("rev "))
+    major, minor = stdout.decode().strip().strip("rev ").split(".")
+    return major, minor[1:]
 
 
 def test_verilator():
@@ -20,11 +22,12 @@ def test_verilator():
     result = verilator.verilator(["--version"], capture_output=True)
 
     # Parse the result
-    v = _parse_version_stdout(result.stdout)
+    vbin_maj, vbin_min = _parse_version_stdout(result.stdout)
 
+    vpkg_maj, vpkg_min, vpkg_patch = verilator.__version__.split(".")
     # Make sure the version run by verilator matches
-    assert v.major == Version(verilator.__version__).major
-    assert v.minor == Version(verilator.__version__).minor
+    assert vbin_maj == vpkg_maj
+    assert vbin_min == vpkg_min
 
 
 def test_verilator_cli():
@@ -33,10 +36,12 @@ def test_verilator_cli():
     result = subprocess.run(["verilator", "--version"], capture_output=True, check=True)
 
     # Parse the result
-    v = _parse_version_stdout(result.stdout)
+    vbin_maj, vbin_min = _parse_version_stdout(result.stdout)
 
+    vpkg_maj, vpkg_min, vpkg_patch = verilator.__version__.split(".")
     # Make sure the version run by verilator matches
-    assert v == Version(verilator.__version__)
+    assert vbin_maj == vpkg_maj
+    assert vbin_min == vpkg_min
 
 
 def test_verilator_root():
