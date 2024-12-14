@@ -69,8 +69,9 @@ jobs:
   upload_pypi:
     needs: [build_linux_wheels, build_sdist]
     runs-on: ubuntu-latest
-    environment: pypi
-    url: https://pypi.org/p/verilator-dspsim
+    environment:
+      name: pypi
+      url: https://pypi.org/p/verilator-dspsim
     permissions:
       id-token: write
     steps:
