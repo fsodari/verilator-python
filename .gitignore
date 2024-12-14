@@ -5,3 +5,5 @@ __pycache__
 wheelhouse
 .env
 archive
+extern
+winflexbison
