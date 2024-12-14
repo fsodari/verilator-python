@@ -1,11 +1,15 @@
 name: Build
 
+# on:
+#   pull_request:
+#   push:
+#     branches:
+#       - main
+#       - releases/**
 on:
-  pull_request:
   push:
-    branches:
-      - main
-      - releases/**
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
 
 jobs:
   # build_windows_wheels:
@@ -66,9 +70,9 @@ jobs:
     needs: [build_linux_wheels, build_sdist]
     runs-on: ubuntu-latest
     environment: pypi
+    url: https://pypi.org/p/verilator-dspsim
     permissions:
       id-token: write
-    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
     steps:
       - uses: actions/download-artifact@v4
         with:
@@ -77,6 +81,5 @@ jobs:
           path: dist
           merge-multiple: true
 
-      - uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          repository-url: https://test.pypi.org/legacy/
+      - name: publish distribution to pypi.org
+        uses: pypa/gh-action-pypi-publish@release/v1
