@@ -68,7 +68,7 @@ before-all = [
 ]
 
 [tool.cibuildwheel.windows]
-environment = { CMAKE_PREFIX_PATH = "extern", WIN_FLEX_BISON = "./extern/winflexbison/install", FLEX_INCLUDE = "./extern/winflexbison/install" }
+environment = { CMAKE_PREFIX_PATH = "./extern", WIN_FLEX_BISON = "./extern/winflexbison/install", FLEX_INCLUDE = "./extern/winflexbison/install" }
 # Install winflexbison to extern/winflexbison. Add extern to prefix path so cmake can find the package when building.
 # 
 before-all = ["powershell ./scripts/win-install-winflexbison.ps1"]
