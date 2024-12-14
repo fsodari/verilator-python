@@ -8,7 +8,8 @@ on:
       - 'v*'
 
 env:
-  WIN_FLEX_BISON: ${{ github.workspace }}/extern/winflexbison
+  CCACHE_DIR: ${{ github.workspace }}/.ccache
+  WIN_FLEX_BISON: ${{ github.workspace }}/.ccache/winflexbison
 jobs:
   # build_sdist:
   #   name: Build source distribution
