@@ -18,6 +18,9 @@ classifiers = [
     "Topic :: Software Development :: Libraries :: Python Modules",
     "Topic :: Utilities",
 ]
+dependencies = [
+    "packaging>=24.2",
+]
 
 [project.urls]
 Homepage = "https://github.com/fsodari/verilator-python"
@@ -73,4 +76,9 @@ before-all = [
     "apk add flex-dev",
     "apk add bison",
     "apk add ccache",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3.4",
 ]

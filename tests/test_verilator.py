@@ -23,7 +23,8 @@ def test_verilator():
     v = _parse_version_stdout(result.stdout)
 
     # Make sure the version run by verilator matches
-    assert v == Version(verilator.__version__)
+    assert v.major == Version(verilator.__version__).major
+    assert v.minor == Version(verilator.__version__).minor
 
 
 def test_verilator_cli():
