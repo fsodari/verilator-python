@@ -54,11 +54,8 @@ wheels = [
 
 [[package]]
 name = "verilator-dspsim"
-version = "5.30.3"
+version = "5.30.6"
 source = { editable = "." }
-dependencies = [
-    { name = "packaging" },
-]
 
 [package.dev-dependencies]
 dev = [
@@ -66,7 +63,6 @@ dev = [
 ]
 
 [package.metadata]
-requires-dist = [{ name = "packaging", specifier = ">=24.2" }]
 
 [package.metadata.requires-dev]
 dev = [{ name = "pytest", specifier = ">=8.3.4" }]
