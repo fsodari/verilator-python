@@ -23,7 +23,6 @@ import importlib.metadata
 
 __version__ = importlib.metadata.version("verilator-dspsim")
 
-import importlib.metadata
 import sys
 from pathlib import Path
 import subprocess
