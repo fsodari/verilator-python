@@ -74,7 +74,7 @@ def _verilator_cli() -> int:
     Otherwise it's probably best to use verilator(sys.argv[1:])
     instead of calling this function.
     """
-    result = verilator(sys.argv[1:])
+    result = verilator(sys.argv[1:], check=False)
     exit(result.returncode)
 
 
