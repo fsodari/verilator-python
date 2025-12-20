@@ -23,7 +23,6 @@ import importlib.metadata
 
 __version__ = importlib.metadata.version("verilator-dspsim")
 
-import importlib.metadata
 import sys
 from pathlib import Path
 import subprocess
@@ -50,11 +49,11 @@ def verilator_bin() -> Path:
         return verilator_root() / "bin/verilator"
 
 
-def verilator(args: list[str], capture_output: bool = False):
+def verilator(args: list[str], capture_output: bool = False, check: bool = False):
     """
     Run verilator with the given args.
 
-    Returns the return code of
+    Returns the result of subprocess.run.
     """
 
     # Set VERILATOR_ROOT in the environment. Verilator usually requires this.
@@ -64,7 +63,7 @@ def verilator(args: list[str], capture_output: bool = False):
     command_args = [verilator_bin()] + args
 
     # Run using subprocess.
-    return subprocess.run(command_args, capture_output=capture_output, check=True)
+    return subprocess.run(command_args, capture_output=capture_output, check=check)
 
 
 def _verilator_cli() -> int:
@@ -75,7 +74,7 @@ def _verilator_cli() -> int:
     Otherwise it's probably best to use verilator(sys.argv[1:])
     instead of calling this function.
     """
-    result = verilator(sys.argv[1:])
+    result = verilator(sys.argv[1:], check=False)
     exit(result.returncode)
 
 
