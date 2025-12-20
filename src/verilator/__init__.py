@@ -49,7 +49,7 @@ def verilator_bin() -> Path:
         return verilator_root() / "bin/verilator"
 
 
-def verilator(args: list[str], capture_output: bool = False):
+def verilator(args: list[str], capture_output: bool = False, check: bool = True):
     """
     Run verilator with the given args.
 
@@ -63,7 +63,7 @@ def verilator(args: list[str], capture_output: bool = False):
     command_args = [verilator_bin()] + args
 
     # Run using subprocess.
-    return subprocess.run(command_args, capture_output=capture_output, check=True)
+    return subprocess.run(command_args, capture_output=capture_output, check=check)
 
 
 def _verilator_cli() -> int:
