@@ -49,11 +49,11 @@ def verilator_bin() -> Path:
         return verilator_root() / "bin/verilator"
 
 
-def verilator(args: list[str], capture_output: bool = False, check: bool = True):
+def verilator(args: list[str], capture_output: bool = False, check: bool = False):
     """
     Run verilator with the given args.
 
-    Returns the return code of
+    Returns the result of subprocess.run.
     """
 
     # Set VERILATOR_ROOT in the environment. Verilator usually requires this.
