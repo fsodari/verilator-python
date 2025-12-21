@@ -24,7 +24,8 @@ include(FetchContent)
 FetchContent_Declare(
     verilator
     GIT_REPOSITORY https://github.com/verilator/verilator.git
-    GIT_TAG ${VERILATOR_TAG_VERSION})
+    # GIT_TAG ${VERILATOR_TAG_VERSION}
+)
 FetchContent_MakeAvailable(verilator)
 
 # No need to do anything else.

@@ -7,3 +7,4 @@ wheelhouse
 archive
 extern
 winflexbison
+obj_dir/

@@ -8,12 +8,16 @@ import subprocess
 # from packaging.version import Version
 import site
 from pathlib import Path
+from tempfile import TemporaryDirectory
 
 
 def _parse_version_stdout(stdout: bytes):
     """Parse the version from stdout. Used to test if verilator works."""
-    major, minor = stdout.decode().strip().strip("rev ").split(".")
-    return major, minor[1:]
+    major, minor_full = stdout.decode().strip().strip("rev ").split(".")
+
+    # Split full version on intermediate builds. Remove leading zero.
+    minor = str(int(minor_full.split("-")[0]))
+    return major, minor
 
 
 def test_verilator():
@@ -56,3 +60,30 @@ def test_verilator_root():
     assert verilator_root.exists()
     assert verilator.verilator_bin().exists()
     assert Path(verilator_root / "verilator-config.cmake").exists()
+
+
+def test_verilate():
+    """"""
+    #
+    sources = [Path("tests/TestModel.sv")]
+    include_dirs = [Path("tests")]
+    parameters = {"DW": 8}
+
+    with TemporaryDirectory() as tmpdir:
+        tmpdir = Path(tmpdir)
+        # Verilate the model, generating a cpp model.
+        _stdout = verilator.verilate(
+            sources,
+            tmpdir,
+            include_dirs,
+            parameters,
+            trace_vcd=True,
+            verilator_args=["--cc", "--quiet"],
+        )
+
+        # Check that the .h and .cpp files were generated.
+        for source in sources:
+            prefix = f"V{source.stem}"
+            required_suffixes = [".h", ".cpp"]
+            for suffix in required_suffixes:
+                assert (tmpdir / prefix).with_suffix(suffix).exists()
