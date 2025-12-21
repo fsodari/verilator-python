@@ -10,8 +10,6 @@ import site
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
-test_dir = Path(__file__).parent
-
 
 def _parse_version_stdout(stdout: bytes):
     """Parse the version from stdout. Used to test if verilator works."""
@@ -64,15 +62,40 @@ def test_verilator_root():
     assert Path(verilator_root / "verilator-config.cmake").exists()
 
 
+# Need to define in code so it can built from sdist.
+test_model = """
+module TestModel #(
+    parameter DW = 24
+) (
+    input  logic clk,
+    input  logic [DW-1:0] d,
+    output logic signed [DW-1:0] q
+);
+
+always @(posedge clk) begin
+    q <= d;
+end
+
+endmodule
+"""
+
+
 def test_verilate():
     """"""
     #
-    sources = [test_dir / "TestModel.sv"]
+
     include_dirs = [Path("tests")]
     parameters = {"DW": 8}
 
     with TemporaryDirectory() as tmpdir:
         tmpdir = Path(tmpdir)
+
+        # Generate source files.
+        source_file = tmpdir / "TestModel.sv"
+        with open(source_file, "w") as fp:
+            fp.write(test_model)
+
+        sources = [source_file]
         # Verilate the model, generating a cpp model.
         _stdout = verilator.verilate(
             sources,
