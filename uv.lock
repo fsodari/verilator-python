@@ -65,7 +65,7 @@ wheels = [
 
 [[package]]
 name = "verilator-dspsim"
-version = "5.42.0"
+version = "5.42.1"
 source = { editable = "." }
 
 [package.dev-dependencies]

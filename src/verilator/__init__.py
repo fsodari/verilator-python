@@ -27,6 +27,7 @@ import sys
 from pathlib import Path
 import subprocess
 import os
+from typing import Mapping
 
 
 def verilator_root() -> Path:
@@ -78,8 +79,65 @@ def _verilator_cli() -> int:
     exit(result.returncode)
 
 
+def verilate(
+    sources: list[Path],
+    output_dir: Path | None = None,
+    include_dirs: list[Path] = [],
+    parameters: Mapping[str, str | int | float] = {},
+    prefix: str | None = None,
+    top_module: str | None = None,
+    trace_vcd: bool = False,
+    trace_fst: bool = False,
+    threads: bool = False,
+    trace_threads: bool = False,
+    verilator_args: list[str] = [],
+):
+    """Run verilator with common options, converting python data types into appropriate arguments."""
+    args = [s.as_posix() for s in sources]
+
+    # Output directory
+    if output_dir:
+        args.extend(["--Mdir", output_dir.as_posix()])
+
+    # Include directories.
+    args.extend([f"-I{i}" for i in include_dirs])
+
+    # Override generated module prefix
+    if prefix:
+        args.extend(["--prefix", prefix])
+
+    # Specify module
+    if top_module:
+        args.extend(["--top-module", top_module])
+
+    # Choose to use either vcd or fst tracing.
+    if trace_vcd:
+        args.append("--trace-vcd")
+    elif trace_fst:
+        args.append("--trace-fst")
+
+    if threads:
+        args.append("--threads")
+    if trace_threads:
+        args.append("--trace-threads")
+
+    # Parameters. Scalar parameters only :(
+    args.extend([f"-G{name}={value}" for name, value in parameters.items()])
+
+    # Extra verilator args.
+    args.extend(verilator_args)
+
+    result = verilator(args, capture_output=True, check=False)
+
+    if result.returncode:
+        raise Exception(f"Verilate failed: {result.stderr.decode()}")
+
+    return result.stdout.decode()
+
+
 __all__ = [
     "verilator",
     "verilator_root",
     "verilator_bin",
+    "verilate",
 ]
