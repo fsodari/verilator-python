@@ -7,6 +7,7 @@ set(PROJECT_VERSION_MAJOR ${CMAKE_MATCH_1})
 set(PROJECT_VERSION_MINOR ${CMAKE_MATCH_2})
 set(PROJECT_VERSION_PATCH ${CMAKE_MATCH_3})
 
+# Format the Verilator tag version as v<major>.0<minor>
 set(VERILATOR_TAG_VERSION "v${PROJECT_VERSION_MAJOR}.0${PROJECT_VERSION_MINOR}")
 message("Verilator Tag: ${VERILATOR_TAG_VERSION}")
 
@@ -24,7 +25,7 @@ include(FetchContent)
 FetchContent_Declare(
     verilator
     GIT_REPOSITORY https://github.com/verilator/verilator.git
-    # GIT_TAG ${VERILATOR_TAG_VERSION}
+    GIT_TAG ${VERILATOR_TAG_VERSION}
 )
 FetchContent_MakeAvailable(verilator)
 

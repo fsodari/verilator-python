@@ -82,15 +82,15 @@ def _verilator_cli() -> int:
 def verilate(
     sources: list[Path],
     output_dir: Path | None = None,
-    include_dirs: list[Path] = [],
-    parameters: Mapping[str, str | int | float] = {},
+    include_dirs: list[Path] | None = None,
+    parameters: Mapping[str, str | int | float] | None = None,
     prefix: str | None = None,
     top_module: str | None = None,
     trace_vcd: bool = False,
     trace_fst: bool = False,
     threads: bool = False,
     trace_threads: bool = False,
-    verilator_args: list[str] = [],
+    verilator_args: list[str] | None = None,
 ):
     """Run verilator with common options, converting python data types into appropriate arguments."""
     args = [s.as_posix() for s in sources]
@@ -100,7 +100,8 @@ def verilate(
         args.extend(["--Mdir", output_dir.as_posix()])
 
     # Include directories.
-    args.extend([f"-I{i}" for i in include_dirs])
+    if include_dirs:
+        args.extend([f"-I{i}" for i in include_dirs])
 
     # Override generated module prefix
     if prefix:
@@ -122,10 +123,12 @@ def verilate(
         args.append("--trace-threads")
 
     # Parameters. Scalar parameters only :(
-    args.extend([f"-G{name}={value}" for name, value in parameters.items()])
+    if parameters:
+        args.extend([f"-G{name}={value}" for name, value in parameters.items()])
 
     # Extra verilator args.
-    args.extend(verilator_args)
+    if verilator_args:
+        args.extend(verilator_args)
 
     result = verilator(args, capture_output=True, check=False)
 

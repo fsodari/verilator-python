@@ -112,3 +112,34 @@ def test_verilate():
             required_suffixes = [".h", ".cpp"]
             for suffix in required_suffixes:
                 assert (tmpdir / prefix).with_suffix(suffix).exists()
+
+
+def test_fst_trace():
+    include_dirs = [Path("tests")]
+    parameters = {"DW": 8}
+
+    with TemporaryDirectory() as tmpdir:
+        tmpdir = Path(tmpdir)
+
+        # Generate source files.
+        source_file = tmpdir / "TestModel.sv"
+        with open(source_file, "w") as fp:
+            fp.write(test_model)
+
+        sources = [source_file]
+        # Verilate the model, generating a cpp model.
+        _stdout = verilator.verilate(
+            sources,
+            tmpdir,
+            include_dirs,
+            parameters,
+            trace_fst=True,
+            verilator_args=["--cc", "--quiet"],
+        )
+
+        # Check that the .h and .cpp files were generated.
+        for source in sources:
+            prefix = f"V{source.stem}"
+            required_suffixes = [".h", ".cpp"]
+            for suffix in required_suffixes:
+                assert (tmpdir / prefix).with_suffix(suffix).exists()
