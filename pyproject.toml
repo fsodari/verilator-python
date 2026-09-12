@@ -21,7 +21,7 @@ dependencies = []
 Homepage = "https://github.com/fsodari/verilator-python"
 
 [project.scripts]
-verilator-dspsim = "verilator_dspsim:_verilator_cli"
+verilator-dspsim = "verilator:_verilator_cli"
 
 [build-system]
 requires = ["scikit-build-core>=1.0.3"]
@@ -37,8 +37,9 @@ build-dir = "build"
 # Supporting cp312 stable abi.
 wheel.py-api = "cp312"
 
+wheel.packages = ["src/verilator"]
 # This needs to be set so that verilator installs at site-packages/verilator_dspsim
-wheel.install-dir = "verilator_dspsim"
+wheel.install-dir = "verilator"
 
 
 [tool.cibuildwheel]
