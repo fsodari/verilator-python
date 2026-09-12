@@ -1,7 +1,7 @@
 
 [project]
 name = "verilator-dspsim"
-version = "5.50.1"
+version = "5.52.0"
 description = "A Python wrapper around an installation of Verilator."
 readme = "README.md"
 authors = [{ name = "Frank Sodari" }]
@@ -21,10 +21,10 @@ dependencies = []
 Homepage = "https://github.com/fsodari/verilator-python"
 
 [project.scripts]
-verilator = "verilator:_verilator_cli"
+verilator-dspsim = "verilator_dspsim:_verilator_cli"
 
 [build-system]
-requires = ["scikit-build-core>=0.11.6"]
+requires = ["scikit-build-core>=1.0.3"]
 build-backend = "scikit_build_core.build"
 
 [tool.scikit-build]
@@ -32,16 +32,13 @@ cmake.version = ">=3.26.1"
 cmake.build-type = "Release"
 build.verbose = true
 minimum-version = "build-system.requires"
-# build-dir = "build/{wheel_tag}"
+build-dir = "build"
 
 # Supporting cp312 stable abi.
 wheel.py-api = "cp312"
 
-# The installed package.
-wheel.packages = ["src/verilator"]
-
-# This needs to be set so that verilator installs at site-packages/verilator
-wheel.install-dir = "verilator"
+# This needs to be set so that verilator installs at site-packages/verilator_dspsim
+wheel.install-dir = "verilator_dspsim"
 
 
 [tool.cibuildwheel]
@@ -69,14 +66,9 @@ before-all = [
     # "yum install -y ccache",
 ]
 
-# [tool.cibuildwheel.windows]
-# environment = { CMAKE_PREFIX_PATH = "./extern", WIN_FLEX_BISON = "./extern/winflexbison/install", FLEX_INCLUDE = "./extern/winflexbison/install" }
-# # Install winflexbison to extern/winflexbison. Add extern to prefix path so cmake can find the package when building.
-# # 
-# before-all = ["powershell ./scripts/win-install-winflexbison.ps1"]
-
 [dependency-groups]
 dev = [
     "pytest>=9.0.3",
     "ruff>=0.16.7",
+    "scikit-build-core>=1.0.3"
 ]

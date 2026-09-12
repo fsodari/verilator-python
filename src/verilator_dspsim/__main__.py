@@ -9,7 +9,9 @@ This directory is on the path so you can just run "verilator" on the command lin
 Either option is available for use.
 """
 
+import sys
+
 from . import _verilator_cli
 
 if __name__ == "__main__":
-    exit(_verilator_cli())
+    sys.exit(_verilator_cli())

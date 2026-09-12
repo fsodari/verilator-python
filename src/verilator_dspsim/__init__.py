@@ -23,20 +23,23 @@ import importlib.metadata
 
 __version__ = importlib.metadata.version("verilator-dspsim")
 
+import os
+import subprocess
 import sys
 from pathlib import Path
-import subprocess
-import os
-from typing import Mapping
 
 
 def verilator_root() -> Path:
     """
     Get the path to verilator_root.
-    This will typically be at site-packages/verilator
+    This will typically be at site-packages/verilator_dspsim
     """
     # Verilator is installed in the same directory as this package.
     return Path(__file__).parent.absolute()
+
+
+# Set VERILATOR_ROOT in the environment when this package is imported. Verilator requires this.
+os.environ["VERILATOR_ROOT"] = str(verilator_root())
 
 
 def verilator_bin() -> Path:
@@ -57,9 +60,6 @@ def verilator(args: list[str], capture_output: bool = False, check: bool = False
     Returns the result of subprocess.run.
     """
 
-    # Set VERILATOR_ROOT in the environment. Verilator usually requires this.
-    os.environ["VERILATOR_ROOT"] = str(verilator_root())
-
     # Prepend the verilator_exe path to the verilator args.
     command_args = [verilator_bin()] + args
 
@@ -76,71 +76,11 @@ def _verilator_cli() -> int:
     instead of calling this function.
     """
     result = verilator(sys.argv[1:], check=False)
-    exit(result.returncode)
-
-
-def verilate(
-    sources: list[Path],
-    output_dir: Path | None = None,
-    include_dirs: list[Path] | None = None,
-    parameters: Mapping[str, str | int | float] | None = None,
-    prefix: str | None = None,
-    top_module: str | None = None,
-    trace_vcd: bool = False,
-    trace_fst: bool = False,
-    threads: bool = False,
-    trace_threads: bool = False,
-    verilator_args: list[str] | None = None,
-):
-    """Run verilator with common options, converting python data types into appropriate arguments."""
-    args = [s.as_posix() for s in sources]
-
-    # Output directory
-    if output_dir:
-        args.extend(["--Mdir", output_dir.as_posix()])
-
-    # Include directories.
-    if include_dirs:
-        args.extend([f"-I{i}" for i in include_dirs])
-
-    # Override generated module prefix
-    if prefix:
-        args.extend(["--prefix", prefix])
-
-    # Specify module
-    if top_module:
-        args.extend(["--top-module", top_module])
-
-    # Choose to use either vcd or fst tracing.
-    if trace_vcd:
-        args.append("--trace-vcd")
-    elif trace_fst:
-        args.append("--trace-fst")
-
-    if threads:
-        args.append("--threads")
-    if trace_threads:
-        args.append("--trace-threads")
-
-    # Parameters. Scalar parameters only :(
-    if parameters:
-        args.extend([f"-G{name}={value}" for name, value in parameters.items()])
-
-    # Extra verilator args.
-    if verilator_args:
-        args.extend(verilator_args)
-
-    result = verilator(args, capture_output=True, check=False)
-
-    if result.returncode:
-        raise Exception(f"Verilate failed: {result.stderr.decode()}")
-
-    return result.stdout.decode()
+    sys.exit(result.returncode)
 
 
 __all__ = [
     "verilator",
-    "verilator_root",
     "verilator_bin",
-    "verilate",
+    "verilator_root",
 ]

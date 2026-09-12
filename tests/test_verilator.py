@@ -2,13 +2,14 @@
 Test if the package works.
 """
 
-import verilator
-import subprocess
-
 # from packaging.version import Version
 import site
+import subprocess
 from pathlib import Path
 from tempfile import TemporaryDirectory
+
+import verilator_dspsim
+import verilator_dspsim.utils
 
 
 def _parse_version_stdout(stdout: bytes):
@@ -21,44 +22,41 @@ def _parse_version_stdout(stdout: bytes):
 
 
 def test_verilator():
-    """"""
     # Print the version
-    result = verilator.verilator(["--version"], capture_output=True)
+    result = verilator_dspsim.verilator(["--version"], capture_output=True)
 
     # Parse the result
     vbin_maj, vbin_min = _parse_version_stdout(result.stdout)
 
-    vpkg_maj, vpkg_min, vpkg_patch = verilator.__version__.split(".")
+    vpkg_maj, vpkg_min, _vpkg_patch = verilator_dspsim.__version__.split(".")
     # Make sure the version run by verilator matches
     assert vbin_maj == vpkg_maj
     assert vbin_min == vpkg_min
 
 
 def test_verilator_cli():
-    """"""
     # Run subprocess instead. Print the version.
-    result = subprocess.run(["verilator", "--version"], capture_output=True, check=True)
+    result = subprocess.run(["verilator-dspsim", "--version"], capture_output=True, check=True)
 
     # Parse the result
     vbin_maj, vbin_min = _parse_version_stdout(result.stdout)
 
-    vpkg_maj, vpkg_min, vpkg_patch = verilator.__version__.split(".")
+    vpkg_maj, vpkg_min, _vpkg_patch = verilator_dspsim.__version__.split(".")
     # Make sure the version run by verilator matches
     assert vbin_maj == vpkg_maj
     assert vbin_min == vpkg_min
 
 
 def test_verilator_root():
-    """"""
     # Check the root.
-    verilator_root = verilator.verilator_root()
+    verilator_root = verilator_dspsim.verilator_root()
 
     # We expect this package to be installed in site-packages.
     assert verilator_root.parent in [Path(p) for p in site.getsitepackages()]
 
     # Check for expected files.
     assert verilator_root.exists()
-    assert verilator.verilator_bin().exists()
+    assert verilator_dspsim.verilator_bin().exists()
     assert Path(verilator_root / "verilator-config.cmake").exists()
 
 
@@ -81,9 +79,6 @@ endmodule
 
 
 def test_verilate():
-    """"""
-    #
-
     include_dirs = [Path("tests")]
     parameters = {"DW": 8}
 
@@ -97,7 +92,7 @@ def test_verilate():
 
         sources = [source_file]
         # Verilate the model, generating a cpp model.
-        _stdout = verilator.verilate(
+        _stdout = verilator_dspsim.utils.verilate(
             sources,
             tmpdir,
             include_dirs,
@@ -128,7 +123,7 @@ def test_fst_trace():
 
         sources = [source_file]
         # Verilate the model, generating a cpp model.
-        _stdout = verilator.verilate(
+        _stdout = verilator_dspsim.utils.verilate(
             sources,
             tmpdir,
             include_dirs,
