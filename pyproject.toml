@@ -1,7 +1,7 @@
 
 [project]
 name = "verilator-dspsim"
-version = "5.52.0"
+version = "5.52.1"
 description = "A Python wrapper around an installation of Verilator."
 readme = "README.md"
 authors = [{ name = "Frank Sodari" }]
@@ -34,8 +34,8 @@ build.verbose = true
 minimum-version = "build-system.requires"
 build-dir = "build"
 
-# Supporting cp312 stable abi.
-wheel.py-api = "cp312"
+# # Supporting cp312 stable abi.
+# wheel.py-api = "cp312"
 
 wheel.packages = ["src/verilator"]
 # This needs to be set so that verilator installs at site-packages/verilator_dspsim
@@ -53,7 +53,7 @@ test-requires = "pytest"
 # 64 bit builds
 archs = ["auto64"]
 
-build = ["cp312-*"]
+# build = ["cp312-*"]
 # Don't build arm. Use only > cp39, no PyPy. Not using musl anywhere so no musl (it works though)
 skip = ["*-win_arm64", "*musllinux*"]
 
