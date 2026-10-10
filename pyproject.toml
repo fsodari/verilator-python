@@ -69,6 +69,15 @@ before-all = [
     # "yum install -y ccache",
 ]
 
+[tool.cibuildwheel.macos]
+before-all = [
+    "brew install autoconf",
+    "brew install help2man",
+    "brew install flex",
+    "brew install bison",
+    "brew install lz4",
+]
+
 [dependency-groups]
 dev = [
     "pytest>=9.0.3",
