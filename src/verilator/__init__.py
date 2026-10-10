@@ -40,7 +40,7 @@ def verilator_root() -> Path:
 
     This depends on how verilator was built. The CMake build (Windows) installs
     VERILATOR_ROOT directly into the package: site-packages/verilator
-    The autotools build (everything else) installs into the package as a prefix,
+    The autotools build (Linux, macOS) installs into the package as a prefix,
     so VERILATOR_ROOT is at site-packages/verilator/share/verilator
     """
     share_root = _package_dir() / "share" / "verilator"

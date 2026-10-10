@@ -13,8 +13,9 @@ message("Verilator Tag: ${VERILATOR_TAG_VERSION}")
 
 set(VERILATOR_GIT_REPOSITORY https://github.com/verilator/verilator.git)
 
-# Verilator only supports its CMake build on Windows. Everywhere else the supported
-# process is autoconf/configure/make, so CMake is only used to drive that build.
+# Verilator only supports its CMake build on Windows. Everywhere else (Linux, macOS) the
+# supported process is autoconf/configure/make, so CMake is only used to drive that build.
+# See docs/BuildProcess.md
 # Override with -Ccmake.define.VERILATOR_USE_AUTOTOOLS=<ON|OFF>
 if(WIN32)
     set(VERILATOR_USE_AUTOTOOLS_DEFAULT OFF)

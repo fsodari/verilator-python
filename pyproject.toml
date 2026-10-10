@@ -38,7 +38,7 @@ build-dir = "build"
 wheel.py-api = "py3"
 
 wheel.packages = ["src/verilator"]
-# This needs to be set so that verilator installs at site-packages/verilator_dspsim
+# Install verilator into the python package, at site-packages/verilator
 wheel.install-dir = "verilator"
 
 
@@ -51,8 +51,10 @@ test-requires = "pytest"
 # 64 bit builds
 archs = ["auto64"]
 
+# The wheel is tagged py3-none-<platform> (see wheel.py-api), so one build per platform
+# covers every python version.
 build = ["cp312-*"]
-# Don't build arm. Use only > cp39, no PyPy. Not using musl anywhere so no musl (it works though)
+# Don't build windows arm. Not using musl anywhere so no musl (it works though)
 skip = ["*-win_arm64", "*musllinux*"]
 
 # manylinux builds

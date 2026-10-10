@@ -3,8 +3,8 @@ Run the verilator_cli command when running this package as a module.
 
 python -m verilator
 
-Alternatively, this package will install scripts in the python environment under bin or Scripts
-This directory is on the path so you can just run "verilator" on the command line.
+Alternatively, this package will install a script in the python environment under bin or Scripts
+This directory is on the path so you can just run "verilator-dspsim" on the command line.
 
 Either option is available for use.
 """
