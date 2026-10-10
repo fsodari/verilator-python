@@ -1,5 +1,7 @@
 [build-system]
-requires = ["scikit-build-core>=0.10.6", "nanobind>=2.2.0"]
+# verilator-dspsim must be a build requirement. Builds run in an isolated environment,
+# so find_package(verilator) can't see a verilator that is only installed in your own environment.
+requires = ["scikit-build-core>=0.10.6", "nanobind>=2.2.0", "verilator-dspsim>=5.52.2"]
 build-backend = "scikit_build_core.build"
 
 [project]
