@@ -10,3 +10,5 @@ __version__ = "0.0.1"
 
 # Import contents from the nanobind module.
 from ._example import run_simulation
+
+__all__ = ["run_simulation"]

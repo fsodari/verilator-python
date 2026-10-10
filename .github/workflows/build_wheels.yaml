@@ -7,6 +7,8 @@ on:
       - main
     tags:
       - 'v*'
+  # Started on a tag by check_verilator.yaml, or manually.
+  workflow_dispatch:
 
 env:
   CCACHE_DIR: ${{ github.workspace }}/.ccache
@@ -81,9 +83,38 @@ jobs:
           name: cibw-wheels-linux
           path: ./dist/*.whl
 
+  build_macos_wheels:
+    name: Python cibuildwheel ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        # cibuildwheel builds for the architecture of the runner.
+        # macos-latest: arm64, macos-15-intel: x86_64
+        os: [macos-latest, macos-15-intel]
+
+    steps:
+      - uses: actions/checkout@v5
+      - name: Install uv
+        uses: astral-sh/setup-uv@v10.0.0
+
+      - name: "Set up Python"
+        uses: actions/setup-python@v7
+        with:
+          python-version-file: ".python-version"
+
+      - name: Build macOS wheels
+        run: uvx cibuildwheel --platform macos --output-dir ./dist
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: cibw-wheels-${{ matrix.os }}
+          path: ./dist/*.whl
+
   upload_pypi:
-    if: startsWith(github.event.ref, 'refs/tags/v')
-    needs: [build_linux_wheels, build_windows_wheels, build_sdist]
+    # github.ref is the tag for both tag pushes and workflow_dispatch on a tag.
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: [build_linux_wheels, build_windows_wheels, build_macos_wheels, build_sdist]
     runs-on: ubuntu-latest
     environment:
       name: pypi

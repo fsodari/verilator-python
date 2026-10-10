@@ -3,6 +3,7 @@ Test if the package works.
 """
 
 # from packaging.version import Version
+import re
 import site
 import subprocess
 from pathlib import Path
@@ -14,11 +15,13 @@ import verilator.utils
 
 def _parse_version_stdout(stdout: bytes):
     """Parse the version from stdout. Used to test if verilator works."""
-    major, minor_full = stdout.decode().strip().strip("rev ").split(".")
+    # The autotools build prints "Verilator 5.052 2026-09-05 rev v5.052"
+    # The CMake build prints " rev v5.052"
+    match = re.search(r"(\d+)\.(\d+)", stdout.decode())
+    assert match, f"No version found in {stdout!r}"
 
-    # Split full version on intermediate builds. Remove leading zero.
-    minor = str(int(minor_full.split("-")[0]))
-    return major, minor
+    # Remove leading zero from the minor version.
+    return match.group(1), str(int(match.group(2)))
 
 
 def test_verilator():
@@ -54,7 +57,11 @@ def test_verilator_root():
     verilator_root = verilator.verilator_root()
 
     # We expect this package to be installed in site-packages.
-    assert verilator_root.parent in [Path(p) for p in site.getsitepackages()]
+    package_dir = Path(verilator.__file__).parent
+    assert package_dir.parent in [Path(p) for p in site.getsitepackages()]
+
+    # The root is the package itself (CMake build) or share/verilator within it (autotools build).
+    assert verilator_root in [package_dir, package_dir / "share" / "verilator"]
 
     # Check for expected files.
     assert verilator_root.exists()
