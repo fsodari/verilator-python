@@ -58,3 +58,16 @@ To use the other build system for testing:
 ```
 pip install -Ccmake.define.VERILATOR_USE_AUTOTOOLS=OFF .
 ```
+
+## Releases
+
+Pushing a `v<version>` tag builds the sdist and all wheels, and publishes them to pypi.org if every
+build and its tests pass.
+
+New verilator releases are picked up automatically. The `Check Verilator release` workflow runs daily
+and compares verilator's newest release tag to the version in `pyproject.toml`. If verilator is newer,
+it updates the version to `<major>.<minor>.0`, pushes the commit and tag, and starts the build on that tag.
+It can also be run manually from the Actions tab, with a dry-run option that only reports what it would do.
+
+If the build for a new verilator release fails, nothing is published and the check does not retry.
+Fix the problem, bump the patch version, and push a new tag.
