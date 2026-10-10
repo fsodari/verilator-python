@@ -42,7 +42,10 @@ Editable installs are not supported: `verilator_root()` is derived from `__file_
 Example downstream project (scikit-build-core + nanobind + `verilate()` CMake function):
 
 ```sh
+# Isolated build: uses verilator-dspsim from PyPI (add --find-links <dir> to use a local wheel)
 pip install ./example
+# Uses the verilator-dspsim installed in the current environment
+pip install --no-build-isolation ./example
 python -c "import example;example.run_simulation()"
 ```
 
@@ -79,7 +82,7 @@ In the autotools layout `bin/verilator` computes `VERILATOR_ROOT` from its own l
 - `__init__.py`: `verilator_root()` returns `share/verilator` inside the package directory if it exists (autotools layout) and the package directory otherwise (CMake layout). Importing the package sets `os.environ["VERILATOR_ROOT"]` to it as a side effect. `verilator_bin()` is `bin/verilator_bin.exe` on Windows and `bin/verilator` elsewhere, relative to the package directory in both layouts. `verilator(args)` is a `subprocess.run` passthrough; `_verilator_cli` backs both the console script and `python -m verilator`.
 - `utils.py`: `verilate()` maps Python arguments onto common Verilator flags and raises `VerilatorError` with stderr on a non-zero exit.
 
-Because scikit-build-core adds site-packages to `CMAKE_PREFIX_PATH`, downstream projects only need `find_package(verilator CONFIG REQUIRED)`; `example/` demonstrates this. Both layouts are on CMake's config search path (`<prefix>/verilator/` and `<prefix>/verilator/share/verilator/`).
+Because scikit-build-core adds site-packages to `CMAKE_PREFIX_PATH`, downstream projects only need `find_package(verilator CONFIG REQUIRED)`, plus `verilator-dspsim` in their `build-system.requires`; `example/` demonstrates this. The build requirement matters because builds are isolated: a verilator-dspsim installed only in the user's environment is invisible to the build unless `--no-build-isolation` is used. A `find_package` failure in a downstream project is almost always this, not the install layout. Both layouts are on CMake's config search path (`<prefix>/verilator/` and `<prefix>/verilator/share/verilator/`).
 
 ### Tests
 
