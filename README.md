@@ -15,6 +15,8 @@ Verilator requires that the operating system used to build verilator is the same
 
 Otherwise, you can build from source. This requires having a compatible compiler installed, and any dependencies. Read the verilator user manual for more information.
 
+On Windows, verilator is built with its CMake build. On Linux, CMake is only used to run verilator's supported autoconf/configure/make build, so autoconf, make, flex, bison, perl and help2man are required.
+
 
 ## Install Options
 
