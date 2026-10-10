@@ -24,11 +24,11 @@ Homepage = "https://github.com/fsodari/verilator-python"
 verilator-dspsim = "verilator:_verilator_cli"
 
 [build-system]
-requires = ["scikit-build-core>=1.0.3"]
+requires = ["scikit-build-core>=1.1.1"]
 build-backend = "scikit_build_core.build"
 
 [tool.scikit-build]
-cmake.version = ">=3.26.1"
+cmake.version = ">=4.2"
 cmake.build-type = "Release"
 build.verbose = true
 minimum-version = "build-system.requires"
@@ -43,8 +43,6 @@ wheel.install-dir = "verilator"
 
 
 [tool.cibuildwheel]
-# 2_28 seems to work well with all the tools.
-# manylinux-x86_64-image = "manylinux_2_28"
 build-verbosity = 1
 # Run pytest to ensure that the package was correctly built
 test-command = "pytest {project}/tests"
@@ -75,5 +73,5 @@ before-all = [
 dev = [
     "pytest>=9.0.3",
     "ruff>=0.16.7",
-    "scikit-build-core>=1.0.3"
+    "scikit-build-core>=1.1.1"
 ]
