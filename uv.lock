@@ -1,5 +1,5 @@
 version = 1
-revision = 3
+revision = 5
 requires-python = ">=3.12"
 
 [[package]]
@@ -112,7 +112,7 @@ wheels = [
 
 [[package]]
 name = "verilator-dspsim"
-version = "5.52.2"
+version = "5.54.0"
 source = { editable = "." }
 
 [package.dev-dependencies]
